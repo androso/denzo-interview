@@ -1,8 +1,18 @@
-import { ClerkProvider, Show, SignInButton, UserButton } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Geist } from "next/font/google";
+import { ThemeProvider } from "next-themes";
+
+import { Header } from "@/components/header";
+import { Toaster } from "@/components/ui/sonner";
+import { cn } from "@/lib/utils";
 
 import "./globals.css";
+
+const geist = Geist({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Denzo",
@@ -11,21 +21,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className="h-full antialiased">
+    <html
+      lang="en"
+      className={cn("h-full antialiased", "font-sans", geist.variable)}
+      suppressHydrationWarning
+    >
       <body className="flex min-h-full flex-col">
-        <ClerkProvider>
-          <header className="flex items-center justify-end border-b border-black/10 px-6 py-4 dark:border-white/10">
-            <Suspense>
-              <Show when="signed-out">
-                <SignInButton />
-              </Show>
-              <Show when="signed-in">
-                <UserButton />
-              </Show>
-            </Suspense>
-          </header>
-          {children}
-        </ClerkProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ClerkProvider>
+            <Header />
+            {children}
+            <Toaster />
+          </ClerkProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

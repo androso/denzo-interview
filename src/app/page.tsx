@@ -1,23 +1,41 @@
-import { currentUser } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 
-export default function Home() {
+import { Board } from "@/components/board";
+import { Sidebar } from "@/components/sidebar";
+import { listLists, listTasks } from "@/lib/data";
+
+export default function Home({ searchParams }: PageProps<"/">) {
   return (
-    <main className="flex flex-1 flex-col items-center justify-center gap-3 px-6">
-      <h1 className="text-3xl font-semibold tracking-tight">Hello world</h1>
-      <Suspense>
-        <Greeting />
-      </Suspense>
-    </main>
+    <Suspense>
+      <HomeContent searchParams={searchParams} />
+    </Suspense>
   );
 }
 
-async function Greeting() {
-  const user = await currentUser();
+async function HomeContent({
+  searchParams,
+}: {
+  searchParams: PageProps<"/">["searchParams"];
+}) {
+  const { list: listParam } = await searchParams;
+  const listId = typeof listParam === "string" ? listParam : undefined;
 
-  if (!user?.firstName) {
+  const lists = await listLists();
+  const selectedList =
+    lists.find((list) => list.id === listId) ??
+    lists.find((list) => list.isDefault) ??
+    lists[0];
+
+  if (!selectedList) {
     return null;
   }
 
-  return <p className="text-lg">Hello, {user.firstName}</p>;
+  const tasks = await listTasks(selectedList.id);
+
+  return (
+    <div className="flex min-h-0 flex-1">
+      <Sidebar lists={lists} selectedListId={selectedList.id} />
+      <Board list={selectedList} tasks={tasks} lists={lists} />
+    </div>
+  );
 }
