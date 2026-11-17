@@ -2,7 +2,7 @@ import { UserButton } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 
-import { getCurrentUser } from "@/lib/data";
+import { getCurrentUser } from "@/features/users/queries";
 
 export function Header() {
   return (

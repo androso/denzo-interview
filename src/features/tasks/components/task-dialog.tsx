@@ -3,7 +3,7 @@
 import { useState, useTransition, type FormEvent } from "react";
 import { toast } from "sonner";
 
-import { deleteTask, updateTask } from "@/app/actions";
+import { deleteTask, updateTask } from "@/features/tasks/actions";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,15 +32,16 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import type { Task } from "@/db/schema";
-import type { ListWithCount } from "@/lib/data";
+import type { ListWithCount } from "@/features/lists/models";
 import {
   TASK_DETAILS_MAX,
+  isTaskStatus,
   TASK_STATUS_LABELS,
   TASK_STATUSES,
   TASK_TITLE_MAX,
   type TaskStatus,
   type TaskUpdate,
-} from "@/lib/models";
+} from "@/features/tasks/models";
 
 export function TaskDialog({
   task,
@@ -235,8 +236,4 @@ function TaskDialogForm({
       </AlertDialog>
     </>
   );
-}
-
-function isTaskStatus(value: string): value is TaskStatus {
-  return (TASK_STATUSES as readonly string[]).includes(value);
 }

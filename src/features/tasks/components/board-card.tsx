@@ -12,10 +12,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import type { Task } from "@/db/schema";
 import {
+  isTaskStatus,
   TASK_STATUS_LABELS,
   TASK_STATUSES,
   type TaskStatus,
-} from "@/lib/models";
+} from "@/features/tasks/models";
 
 export function BoardCard({
   task,
@@ -70,8 +71,4 @@ export function BoardCard({
       </DropdownMenu>
     </div>
   );
-}
-
-function isTaskStatus(value: string): value is TaskStatus {
-  return (TASK_STATUSES as readonly string[]).includes(value);
 }

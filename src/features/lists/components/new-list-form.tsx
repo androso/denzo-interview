@@ -4,22 +4,12 @@ import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { createList } from "@/app/actions";
-import { SidebarListItem } from "@/components/sidebar-list-item";
+import { createList } from "@/features/lists/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import type { ListWithCount } from "@/lib/data";
-import { LIST_NAME_MAX, listNameSchema } from "@/lib/models";
+import { LIST_NAME_MAX, listNameSchema } from "@/features/lists/models";
 
-export function SidebarNav({
-  lists,
-  selectedListId,
-  onNavigate,
-}: {
-  lists: ListWithCount[];
-  selectedListId: string;
-  onNavigate?: () => void;
-}) {
+export function NewListForm({ onNavigate }: { onNavigate?: () => void }) {
   const router = useRouter();
   const inputId = useId();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -66,18 +56,7 @@ export function SidebarNav({
   }
 
   return (
-    <nav className="flex min-h-0 flex-1 flex-col gap-3 p-3" aria-label="Lists">
-      <ul className="flex min-h-0 flex-1 flex-col gap-0.5 overflow-y-auto">
-        {lists.map((list) => (
-          <li key={list.id}>
-            <SidebarListItem
-              list={list}
-              selected={list.id === selectedListId}
-              onNavigate={onNavigate}
-            />
-          </li>
-        ))}
-      </ul>
+    <>
       {creating ? (
         <form
           onSubmit={(event) => {
@@ -117,6 +96,6 @@ export function SidebarNav({
           + New list
         </Button>
       )}
-    </nav>
+    </>
   );
 }

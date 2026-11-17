@@ -1,19 +1,13 @@
 "use client";
 
 import { ChevronDownIcon, ChevronRightIcon } from "lucide-react";
-import { useState, useTransition, type FormEvent } from "react";
-import { toast } from "sonner";
+import { useState } from "react";
 
-import { createTask } from "@/app/actions";
-import { BoardCard } from "@/components/board-card";
+import { QuickAdd } from "@/features/tasks/components/quick-add";
+import { BoardCard } from "@/features/tasks/components/board-card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type { Task } from "@/db/schema";
-import {
-  TASK_STATUS_LABELS,
-  TASK_TITLE_MAX,
-  type TaskStatus,
-} from "@/lib/models";
+import { TASK_STATUS_LABELS, type TaskStatus } from "@/features/tasks/models";
 
 export function BoardColumn({
   status,
@@ -69,39 +63,5 @@ export function BoardColumn({
       )}
       {status === "todo" ? <QuickAdd listId={listId} /> : null}
     </section>
-  );
-}
-
-function QuickAdd({ listId }: { listId: string }) {
-  const [title, setTitle] = useState("");
-  const [pending, startTransition] = useTransition();
-
-  function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const nextTitle = title.trim();
-    if (!nextTitle || pending) return;
-
-    startTransition(async () => {
-      const result = await createTask(listId, nextTitle);
-      if (!result.ok) {
-        toast.error(result.error);
-        return;
-      }
-      setTitle("");
-    });
-  }
-
-  return (
-    <form onSubmit={onSubmit} className="mt-1">
-      <Input
-        value={title}
-        onChange={(event) => setTitle(event.target.value)}
-        placeholder="Add a task"
-        maxLength={TASK_TITLE_MAX}
-        disabled={pending}
-        aria-label="Add a task"
-        autoComplete="off"
-      />
-    </form>
   );
 }

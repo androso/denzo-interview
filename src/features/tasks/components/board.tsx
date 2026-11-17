@@ -3,12 +3,12 @@
 import { useOptimistic, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { updateTask } from "@/app/actions";
-import { BoardColumn } from "@/components/board-column";
-import { TaskDialog } from "@/components/task-dialog";
+import { updateTask } from "@/features/tasks/actions";
+import { BoardColumn } from "@/features/tasks/components/board-column";
+import { TaskDialog } from "@/features/tasks/components/task-dialog";
 import type { Task } from "@/db/schema";
-import type { ListWithCount } from "@/lib/data";
-import { TASK_STATUSES, type TaskStatus } from "@/lib/models";
+import type { ListWithCount } from "@/features/lists/models";
+import { TASK_STATUSES, type TaskStatus } from "@/features/tasks/models";
 
 export function Board({
   list,

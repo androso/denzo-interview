@@ -1,3 +1,5 @@
+import { HomeSkeleton } from "@/components/home-skeleton";
+
 export default function Loading() {
-  return <p className="p-6">Loading...</p>;
+  return <HomeSkeleton />;
 }

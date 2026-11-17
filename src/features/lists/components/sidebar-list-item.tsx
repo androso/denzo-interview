@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { toast } from "sonner";
 
-import { deleteList, renameList } from "@/app/actions";
+import { deleteList, renameList } from "@/features/lists/actions";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -24,8 +24,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import type { ListWithCount } from "@/lib/data";
-import { LIST_NAME_MAX, listNameSchema } from "@/lib/models";
+import type { ListWithCount } from "@/features/lists/models";
+import { LIST_NAME_MAX, listNameSchema } from "@/features/lists/models";
 import { cn } from "@/lib/utils";
 
 export function SidebarListItem({

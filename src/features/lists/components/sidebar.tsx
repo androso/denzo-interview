@@ -3,7 +3,7 @@
 import { MenuIcon } from "lucide-react";
 import { useState } from "react";
 
-import { SidebarNav } from "@/components/sidebar-nav";
+import { SidebarNav } from "@/features/lists/components/sidebar-nav";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,7 +12,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { ListWithCount } from "@/lib/data";
+import type { ListWithCount } from "@/features/lists/models";
 
 export function Sidebar({
   lists,

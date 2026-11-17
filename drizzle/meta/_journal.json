@@ -8,6 +8,13 @@
       "when": 1794519818344,
       "tag": "0000_calm_lake",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1794586233545,
+      "tag": "0001_clerk_user_profile",
+      "breakpoints": true
     }
   ]
 }

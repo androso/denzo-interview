@@ -2,6 +2,7 @@ import { sql } from "drizzle-orm";
 import {
   boolean,
   index,
+  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -10,13 +11,16 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-import { TASK_STATUSES } from "../lib/models";
+import type { ClerkProfile } from "../features/users/profile";
+import { TASK_STATUSES } from "../features/tasks/models";
 
 export const taskStatus = pgEnum("task_status", TASK_STATUSES);
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
+  email: text("email"),
+  profile: jsonb("profile").$type<ClerkProfile>(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .notNull()
     .defaultNow(),
