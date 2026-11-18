@@ -2,14 +2,14 @@
 
 import { NewListForm } from "@/features/lists/components/new-list-form";
 import { SidebarListItem } from "@/features/lists/components/sidebar-list-item";
-import type { ListWithCount } from "@/features/lists/models";
+import type { ListDto } from "@/features/lists/models";
 
 export function SidebarNav({
   lists,
   selectedListId,
   onNavigate,
 }: {
-  lists: ListWithCount[];
+  lists: ListDto[];
   selectedListId: string;
   onNavigate?: () => void;
 }) {

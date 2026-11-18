@@ -10,11 +10,11 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type { Task } from "@/db/schema";
 import {
   isTaskStatus,
   TASK_STATUS_LABELS,
   TASK_STATUSES,
+  type TaskDto,
   type TaskStatus,
 } from "@/features/tasks/models";
 
@@ -23,7 +23,7 @@ export function BoardCard({
   onOpen,
   onStatusChange,
 }: {
-  task: Task;
+  task: TaskDto;
   onOpen: () => void;
   onStatusChange: (status: TaskStatus) => void;
 }) {

@@ -12,13 +12,13 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import type { ListWithCount } from "@/features/lists/models";
+import type { ListDto } from "@/features/lists/models";
 
 export function Sidebar({
   lists,
   selectedListId,
 }: {
-  lists: ListWithCount[];
+  lists: ListDto[];
   selectedListId: string;
 }) {
   const [open, setOpen] = useState(false);

@@ -6,18 +6,21 @@ import { toast } from "sonner";
 import { updateTask } from "@/features/tasks/actions";
 import { BoardColumn } from "@/features/tasks/components/board-column";
 import { TaskDialog } from "@/features/tasks/components/task-dialog";
-import type { Task } from "@/db/schema";
-import type { ListWithCount } from "@/features/lists/models";
-import { TASK_STATUSES, type TaskStatus } from "@/features/tasks/models";
+import type { ListDto } from "@/features/lists/models";
+import {
+  TASK_STATUSES,
+  type TaskDto,
+  type TaskStatus,
+} from "@/features/tasks/models";
 
 export function Board({
   list,
   tasks,
   lists,
 }: {
-  list: ListWithCount;
-  tasks: Task[];
-  lists: ListWithCount[];
+  list: ListDto;
+  tasks: TaskDto[];
+  lists: ListDto[];
 }) {
   const [optimisticTasks, setOptimisticStatus] = useOptimistic(
     tasks,
@@ -27,9 +30,9 @@ export function Board({
       ),
   );
   const [, startTransition] = useTransition();
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [selectedTask, setSelectedTask] = useState<TaskDto | null>(null);
 
-  function changeStatus(task: Task, status: TaskStatus) {
+  function changeStatus(task: TaskDto, status: TaskStatus) {
     if (task.status === status) return;
 
     startTransition(async () => {

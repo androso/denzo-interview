@@ -6,8 +6,11 @@ import { useState } from "react";
 import { QuickAdd } from "@/features/tasks/components/quick-add";
 import { BoardCard } from "@/features/tasks/components/board-card";
 import { Button } from "@/components/ui/button";
-import type { Task } from "@/db/schema";
-import { TASK_STATUS_LABELS, type TaskStatus } from "@/features/tasks/models";
+import {
+  TASK_STATUS_LABELS,
+  type TaskDto,
+  type TaskStatus,
+} from "@/features/tasks/models";
 
 export function BoardColumn({
   status,
@@ -18,9 +21,9 @@ export function BoardColumn({
 }: {
   status: TaskStatus;
   listId: string;
-  tasks: Task[];
-  onOpenTask: (task: Task) => void;
-  onStatusChange: (task: Task, status: TaskStatus) => void;
+  tasks: TaskDto[];
+  onOpenTask: (task: TaskDto) => void;
+  onStatusChange: (task: TaskDto, status: TaskStatus) => void;
 }) {
   const [collapsed, setCollapsed] = useState(status === "done");
   const hideCards = status === "done" && collapsed;

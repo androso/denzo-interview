@@ -163,7 +163,12 @@ describe("feature operations enforce ownership without action prechecks", () => 
     if (!created.ok) throw new Error(created.error);
     expect(
       await renameListForUser("alice", created.data.id, "Renamed"),
-    ).toMatchObject({ ok: true, data: { name: "Renamed" } });
+    ).toEqual({ ok: true, data: undefined });
+    expect(await listListsForUser("alice")).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: created.data.id, name: "Renamed" }),
+      ]),
+    );
     expect(
       await createTaskForUser("alice", created.data.id, "New task"),
     ).toMatchObject({ ok: true });
@@ -262,7 +267,7 @@ describe("authenticated action boundary", () => {
     const results = await Promise.all([listLists(), listLists(), listLists()]);
     for (const rows of results) {
       expect(rows).toMatchObject([
-        { userId: "new-user", name: "My Tasks", isDefault: true, taskCount: 0 },
+        { name: "My Tasks", isDefault: true, taskCount: 0 },
       ]);
       expect(rows).toHaveLength(1);
     }

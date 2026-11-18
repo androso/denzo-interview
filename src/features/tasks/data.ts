@@ -3,10 +3,18 @@ import "server-only";
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { tasks, type Task } from "@/db/schema";
+import { tasks } from "@/db/schema";
 import { ownsListForUser } from "@/features/lists/data";
 import type { ActionResult } from "@/lib/action-result";
-import type { TaskUpdate } from "./models";
+import type { TaskDto, TaskUpdate } from "./models";
+
+const taskDto = {
+  id: tasks.id,
+  title: tasks.title,
+  details: tasks.details,
+  status: tasks.status,
+  listId: tasks.listId,
+};
 
 const LIST_NOT_FOUND = { ok: false, error: "List not found." } as const;
 const TASK_NOT_FOUND = { ok: false, error: "Task not found." } as const;
@@ -15,13 +23,13 @@ export async function createTaskForUser(
   userId: string,
   listId: string,
   title: string,
-): Promise<ActionResult<Task>> {
+): Promise<ActionResult<TaskDto>> {
   if (!(await ownsListForUser(userId, listId))) return LIST_NOT_FOUND;
 
   const [task] = await db
     .insert(tasks)
     .values({ userId, listId, title })
-    .returning();
+    .returning(taskDto);
 
   return { ok: true, data: task };
 }
@@ -30,7 +38,7 @@ export async function updateTaskForUser(
   userId: string,
   taskId: string,
   update: TaskUpdate,
-): Promise<ActionResult<Task>> {
+): Promise<ActionResult<TaskDto>> {
   if (update.listId && !(await ownsListForUser(userId, update.listId))) {
     return LIST_NOT_FOUND;
   }
@@ -39,7 +47,7 @@ export async function updateTaskForUser(
     .update(tasks)
     .set(update)
     .where(and(eq(tasks.id, taskId), eq(tasks.userId, userId)))
-    .returning();
+    .returning(taskDto);
   if (!task) return TASK_NOT_FOUND;
 
   return { ok: true, data: task };
@@ -62,9 +70,9 @@ export async function deleteTaskForUser(
 export function listTasksForUser(
   userId: string,
   listId: string,
-): Promise<Task[]> {
+): Promise<TaskDto[]> {
   return db
-    .select()
+    .select(taskDto)
     .from(tasks)
     .where(and(eq(tasks.userId, userId), eq(tasks.listId, listId)))
     .orderBy(desc(tasks.updatedAt));

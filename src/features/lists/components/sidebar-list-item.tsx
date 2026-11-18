@@ -24,7 +24,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import type { ListWithCount } from "@/features/lists/models";
+import type { ListDto } from "@/features/lists/models";
 import { LIST_NAME_MAX, listNameSchema } from "@/features/lists/models";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +33,7 @@ export function SidebarListItem({
   selected,
   onNavigate,
 }: {
-  list: ListWithCount;
+  list: ListDto;
   selected: boolean;
   onNavigate?: () => void;
 }) {

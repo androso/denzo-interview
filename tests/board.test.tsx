@@ -10,9 +10,8 @@ import {
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 
 import { Board } from "@/features/tasks/components/board";
-import type { Task } from "@/db/schema";
-import type { ListWithCount } from "@/features/lists/models";
-import type { TaskStatus } from "@/features/tasks/models";
+import type { ListDto } from "@/features/lists/models";
+import type { TaskDto, TaskStatus } from "@/features/tasks/models";
 import type { ActionResult } from "@/lib/action-result";
 
 const mocks = vi.hoisted(() => ({ updateTask: vi.fn(), error: vi.fn() }));
@@ -29,8 +28,8 @@ vi.mock("@/features/tasks/components/board-column", () => ({
     onStatusChange,
   }: {
     status: TaskStatus;
-    tasks: Task[];
-    onStatusChange: (task: Task, status: TaskStatus) => void;
+    tasks: TaskDto[];
+    onStatusChange: (task: TaskDto, status: TaskStatus) => void;
   }) => (
     <section aria-label={status}>
       {tasks.map((task) => (
@@ -46,27 +45,22 @@ vi.mock("@/features/tasks/components/board-column", () => ({
   ),
 }));
 
-const list: ListWithCount = {
+const list: ListDto = {
   id: "list-id",
-  userId: "alice",
   name: "Work",
   isDefault: false,
-  createdAt: new Date(),
   taskCount: 1,
 };
-const task: Task = {
+const task: TaskDto = {
   id: "task-id",
-  userId: "alice",
   listId: list.id,
   title: "Draft",
   details: null,
   status: "todo",
-  createdAt: new Date(),
-  updatedAt: new Date(),
 };
 function deferred() {
-  let resolve!: (result: ActionResult<Task>) => void;
-  const promise = new Promise<ActionResult<Task>>((done) => {
+  let resolve!: (result: ActionResult<TaskDto>) => void;
+  const promise = new Promise<ActionResult<TaskDto>>((done) => {
     resolve = done;
   });
   return { promise, resolve };
@@ -129,7 +123,7 @@ it("uses refreshed server data after a successful optimistic change", async () =
     <Board list={list} lists={[list]} tasks={[task]} />,
   );
   fireEvent.click(screen.getByRole("button", { name: "Finish" }));
-  const updated: Task = { ...task, status: "done" };
+  const updated: TaskDto = { ...task, status: "done" };
   rerender(<Board list={list} lists={[list]} tasks={[updated]} />);
   await act(async () => {
     request.resolve({ ok: true, data: updated });

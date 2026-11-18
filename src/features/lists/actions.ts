@@ -3,7 +3,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { refresh } from "next/cache";
 
-import type { List } from "@/db/schema";
 import type { ActionResult } from "@/lib/action-result";
 import { idSchema } from "@/lib/validation";
 import {
@@ -15,7 +14,9 @@ import { listNameSchema } from "./models";
 
 const INVALID_INPUT = { ok: false, error: "Invalid input." } as const;
 
-export async function createList(name: string): Promise<ActionResult<List>> {
+export async function createList(
+  name: string,
+): Promise<ActionResult<{ id: string }>> {
   const { userId } = await auth.protect();
 
   const parsed = listNameSchema.safeParse(name);
@@ -29,7 +30,7 @@ export async function createList(name: string): Promise<ActionResult<List>> {
 export async function renameList(
   listId: string,
   name: string,
-): Promise<ActionResult<List>> {
+): Promise<ActionResult> {
   const { userId } = await auth.protect();
 
   const id = idSchema.safeParse(listId);

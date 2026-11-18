@@ -34,6 +34,10 @@ export type ClerkProfile = Omit<ParsedClerkUser, "phone_numbers"> & {
   phone_numbers?: Array<Record<string, unknown>>;
 };
 
+export type UserDto = {
+  name: string;
+};
+
 export type StoredUser = {
   id: string;
   name: string;

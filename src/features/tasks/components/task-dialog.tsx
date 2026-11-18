@@ -31,14 +31,14 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { Task } from "@/db/schema";
-import type { ListWithCount } from "@/features/lists/models";
+import type { ListDto } from "@/features/lists/models";
 import {
   TASK_DETAILS_MAX,
   isTaskStatus,
   TASK_STATUS_LABELS,
   TASK_STATUSES,
   TASK_TITLE_MAX,
+  type TaskDto,
   type TaskStatus,
   type TaskUpdate,
 } from "@/features/tasks/models";
@@ -49,8 +49,8 @@ export function TaskDialog({
   open,
   onOpenChange,
 }: {
-  task: Task | null;
-  lists: ListWithCount[];
+  task: TaskDto | null;
+  lists: ListDto[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }) {
@@ -73,8 +73,8 @@ function TaskDialogForm({
   lists,
   onClose,
 }: {
-  task: Task;
-  lists: ListWithCount[];
+  task: TaskDto;
+  lists: ListDto[];
   onClose: () => void;
 }) {
   const [title, setTitle] = useState(task.title);

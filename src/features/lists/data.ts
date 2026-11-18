@@ -1,19 +1,22 @@
 import "server-only";
 
-import { and, asc, count, desc, eq, getTableColumns } from "drizzle-orm";
+import { and, asc, count, desc, eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { lists, tasks, type List } from "@/db/schema";
+import { lists, tasks } from "@/db/schema";
 import type { ActionResult } from "@/lib/action-result";
-import type { ListWithCount } from "./models";
+import type { ListDto } from "./models";
 
 const LIST_NOT_FOUND = { ok: false, error: "List not found." } as const;
 
 export async function createListForUser(
   userId: string,
   name: string,
-): Promise<ActionResult<List>> {
-  const [list] = await db.insert(lists).values({ userId, name }).returning();
+): Promise<ActionResult<{ id: string }>> {
+  const [list] = await db
+    .insert(lists)
+    .values({ userId, name })
+    .returning({ id: lists.id });
 
   return { ok: true, data: list };
 }
@@ -22,15 +25,15 @@ export async function renameListForUser(
   userId: string,
   listId: string,
   name: string,
-): Promise<ActionResult<List>> {
+): Promise<ActionResult> {
   const [list] = await db
     .update(lists)
     .set({ name })
     .where(and(eq(lists.id, listId), eq(lists.userId, userId)))
-    .returning();
+    .returning({ id: lists.id });
   if (!list) return LIST_NOT_FOUND;
 
-  return { ok: true, data: list };
+  return { ok: true, data: undefined };
 }
 
 export async function deleteListForUser(
@@ -64,9 +67,14 @@ export async function ownsListForUser(
   return row !== undefined;
 }
 
-export function listListsForUser(userId: string): Promise<ListWithCount[]> {
+export function listListsForUser(userId: string): Promise<ListDto[]> {
   return db
-    .select({ ...getTableColumns(lists), taskCount: count(tasks.id) })
+    .select({
+      id: lists.id,
+      name: lists.name,
+      isDefault: lists.isDefault,
+      taskCount: count(tasks.id),
+    })
     .from(lists)
     .leftJoin(tasks, eq(tasks.listId, lists.id))
     .where(eq(lists.userId, userId))

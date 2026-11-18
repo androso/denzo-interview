@@ -14,8 +14,8 @@ import { NewListForm } from "@/features/lists/components/new-list-form";
 import { QuickAdd } from "@/features/tasks/components/quick-add";
 import { SidebarListItem } from "@/features/lists/components/sidebar-list-item";
 import { TaskDialog } from "@/features/tasks/components/task-dialog";
-import type { Task } from "@/db/schema";
-import type { ListWithCount } from "@/features/lists/models";
+import type { ListDto } from "@/features/lists/models";
+import type { TaskDto } from "@/features/tasks/models";
 
 const mocks = vi.hoisted(() => ({
   createList: vi.fn(),
@@ -35,23 +35,18 @@ vi.mock("next/navigation", () => ({
 }));
 vi.mock("sonner", () => ({ toast: { error: mocks.error } }));
 
-const list: ListWithCount = {
+const list: ListDto = {
   id: "list-id",
-  userId: "alice",
   name: "Work",
   isDefault: false,
-  createdAt: new Date(),
   taskCount: 1,
 };
-const task: Task = {
+const task: TaskDto = {
   id: "task-id",
-  userId: "alice",
   listId: list.id,
   title: "Original",
   details: null,
   status: "todo",
-  createdAt: new Date(),
-  updatedAt: new Date(),
 };
 
 beforeEach(() => {

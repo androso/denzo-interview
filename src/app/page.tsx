@@ -2,7 +2,7 @@ import { auth } from "@clerk/nextjs/server";
 import { Suspense } from "react";
 
 import { BoardSkeleton, HomeSkeleton } from "@/components/home-skeleton";
-import type { ListWithCount } from "@/features/lists/models";
+import type { ListDto } from "@/features/lists/models";
 import { Sidebar } from "@/features/lists/components/sidebar";
 import { listLists } from "@/features/lists/queries";
 import { Board } from "@/features/tasks/components/board";
@@ -50,8 +50,8 @@ async function BoardContent({
   list,
   lists,
 }: {
-  list: ListWithCount;
-  lists: ListWithCount[];
+  list: ListDto;
+  lists: ListDto[];
 }) {
   const tasks = await listTasks(list.id);
 

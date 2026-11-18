@@ -6,6 +6,14 @@ export const TASK_STATUSES = ["todo", "in_progress", "done"] as const;
 
 export type TaskStatus = (typeof TASK_STATUSES)[number];
 
+export type TaskDto = {
+  id: string;
+  title: string;
+  details: string | null;
+  status: TaskStatus;
+  listId: string;
+};
+
 export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
   todo: "To do",
   in_progress: "In progress",

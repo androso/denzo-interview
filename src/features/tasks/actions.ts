@@ -3,7 +3,6 @@
 import { auth } from "@clerk/nextjs/server";
 import { refresh } from "next/cache";
 
-import type { Task } from "@/db/schema";
 import type { ActionResult } from "@/lib/action-result";
 import { idSchema } from "@/lib/validation";
 import {
@@ -11,14 +10,19 @@ import {
   updateTaskForUser,
   deleteTaskForUser,
 } from "./data";
-import { taskTitleSchema, taskUpdateSchema, type TaskUpdate } from "./models";
+import {
+  taskTitleSchema,
+  taskUpdateSchema,
+  type TaskDto,
+  type TaskUpdate,
+} from "./models";
 
 const INVALID_INPUT = { ok: false, error: "Invalid input." } as const;
 
 export async function createTask(
   listId: string,
   title: string,
-): Promise<ActionResult<Task>> {
+): Promise<ActionResult<TaskDto>> {
   const { userId } = await auth.protect();
 
   const id = idSchema.safeParse(listId);
@@ -32,7 +36,7 @@ export async function createTask(
 export async function updateTask(
   taskId: string,
   update: TaskUpdate,
-): Promise<ActionResult<Task>> {
+): Promise<ActionResult<TaskDto>> {
   const { userId } = await auth.protect();
 
   const id = idSchema.safeParse(taskId);

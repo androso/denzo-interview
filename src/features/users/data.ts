@@ -3,11 +3,14 @@ import "server-only";
 import { eq } from "drizzle-orm";
 
 import { db } from "@/db";
-import { users, type User } from "@/db/schema";
-import type { StoredUser } from "./profile";
+import { users } from "@/db/schema";
+import type { StoredUser, UserDto } from "./profile";
 
-export async function getUser(userId: string): Promise<User | null> {
-  const [user] = await db.select().from(users).where(eq(users.id, userId));
+export async function getUser(userId: string): Promise<UserDto | null> {
+  const [user] = await db
+    .select({ name: users.name })
+    .from(users)
+    .where(eq(users.id, userId));
   return user ?? null;
 }
 
